@@ -3,10 +3,12 @@
 This is a replacement for <a href="https://github.com/YSSF8/OnyxLibrary">Onyx library</a>. We've stopped updating it for some reason.
 
 ### How to import
+#### HTML
 ```html
 <!-- At the end of the body tag paste this code -->
 <script src="./your-script.js" type="module"></script>
 ```
+#### JavaScript
 ```javascript
 // In your script add this at the first line
 import * as xorio from './Xorio.min.js';
