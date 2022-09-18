@@ -1,4 +1,4 @@
-# Xorio Library (1.1)
+# Xorio Library (1.2)
 
 This is a replacement for <a href="https://github.com/YSSF8/OnyxLibrary">Onyx library</a>. We've stopped updating it for some reason.
 
@@ -36,4 +36,7 @@ xorio.createElement('div', 'body', 'class', 'text', 'placeholder'); // placehold
 
 // This function makes a custom alert box
 xorio.alert('title', 'button text'); // If you leave the second option null it will automatically makes the button says (OK)
+
+// This makes a custom prompt box
+xorio.prompt('title', 'button text', 'text field placeholder');
 ```
