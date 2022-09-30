@@ -20,16 +20,19 @@ import * as xorio from './Xorio.min.js';
 xorio.alert('Title');
 
 // This function adds a simple counter
-xorio.count('element, .class, or #id', 100); // The "100" is milliseconds, if you want to count every 1 seconds type 1000
+xorio.count('tag name, .class, or #id', 100); // The "100" is milliseconds, if you want to count every 1 seconds type 1000
 
 // This function makes the element moves with WASD keys
-xorio.WASDElementMoving('element, .class, or #id');
+xorio.WASDMovement('tag name, .class, or #id');
+
+// This function makes the element moves with arrow keys
+xorio.arrowsMovement('tag name, .class, or #id');
 
 // This function makes a customizable console text
-xorio.log('Text you want to appear in the console', 'color: red; font-size: 30px;');
+xorio.print('Text you want to appear in the console', 'color: red; font-size: 30px;');
 
 // This function makes the element follows the cursor
-xorio.followPointer('element, .class, or #id');
+xorio.followPointer('tag name, .class, or #id');
 
 // This function creates an element
 xorio.createElement('div', 'body', 'class', 'text', 'placeholder'); // placeholder if the element is input, the body is the parent
