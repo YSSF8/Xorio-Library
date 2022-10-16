@@ -1,4 +1,4 @@
-# Xorio Library (1.3)
+# Xorio Library (1.4)
 
 This is a replacement for <a href="https://github.com/YSSF8/OnyxLibrary">Onyx library</a>. We've stopped updating it for some reason.
 
@@ -40,6 +40,15 @@ xorio.createElement('div', 'body', 'class', 'text', 'placeholder'); // placehold
 // This function makes a custom alert box
 xorio.alert('title', 'button text'); // If you leave the second option null it will automatically makes the button says (OK)
 
-// This makes a custom prompt box
+// This function makes a custom prompt box
 xorio.prompt('title', 'button text', 'text field placeholder');
+
+// This function changes the position of the element
+xorio.randomPosition('tag name, .class, or #id');
+
+// This class creates a random letters/numbers
+const random = new xorio.Random();
+
+random.letter('tag name, .class, or #id'); // This generates random letter (inside the quotes is the parent)
+random.number('tag name, .class, or #id'); // This generates random number (inside the quotes is the parent)
 ```
