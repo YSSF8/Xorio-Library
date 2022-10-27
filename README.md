@@ -1,4 +1,4 @@
-# Xorio Library (1.4)
+# Xorio Library (1.5)
 
 This is a replacement for <a href="https://github.com/YSSF8/OnyxLibrary">Onyx library</a>. We've stopped updating it for some reason.
 
@@ -51,4 +51,6 @@ const random = new xorio.Random();
 
 random.letter('tag name, .class, or #id'); // This generates random letter (inside the quotes is the parent)
 random.number('tag name, .class, or #id'); // This generates random number (inside the quotes is the parent)
+random.var(variable_limit); // This generates random number but not displayed in the web
+console.log(random.variable); // This prints the "random.var()" in the console (if you want)
 ```
