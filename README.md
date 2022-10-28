@@ -1,4 +1,4 @@
-# Xorio Library (1.6)
+# Xorio Library (1.7)
 
 This is a replacement for <a href="https://github.com/YSSF8/OnyxLibrary">Onyx library</a>. We've stopped updating it for some reason.
 
@@ -53,4 +53,18 @@ random.letter('tag name, .class, or #id'); // This generates random letter (insi
 random.number('tag name, .class, or #id'); // This generates random number (inside the quotes is the parent)
 random.var(variable_limit); // This generates random number but not displayed in the web
 console.log(random.variable); // This prints the "random.var()" in the console (if you want)
+
+const pb = new xorio.Progressbar();
+pb.add('tag name, .class, #id'); // Creates the progressbar
+
+// Starts the progressbar counting
+let loop = setInterval(() => {
+  pb.value++;
+  
+  if (pb.value > 100) {
+    // Event will happen if you put something in here...
+    console.log('Done!');
+    clearInterval(loop);
+  }
+}, 100);
 ```
