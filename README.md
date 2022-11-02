@@ -1,4 +1,4 @@
-# Xorio Library (1.7)
+# Xorio Library (1.8)
 
 This is a replacement for <a href="https://github.com/YSSF8/OnyxLibrary">Onyx library</a>. We've stopped updating it for some reason.
 
@@ -67,4 +67,10 @@ let loop = setInterval(() => {
     clearInterval(loop);
   }
 }, 100);
+
+// This class gives the user ability to move the element using Arrow/WASD keys
+const movements = new xorio.Movement();
+movements.arrows('tag name, .class, or #id'); // Makes the selected element moves with arrow keys
+movements.WASD('tag name, .class, or #id'); // Makes the selected element moves with WASD keys
+movements.both('tag name', .class, or #id); // Makes the selected element moves with arrow/WASD keys
 ```
