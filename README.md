@@ -1,4 +1,4 @@
-# Xorio Library (1.8)
+# Xorio Library (2.0)
 
 This is a replacement for <a href="https://github.com/YSSF8/OnyxLibrary">Onyx library</a>. We've stopped updating it for some reason.
 
