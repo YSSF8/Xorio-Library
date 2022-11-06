@@ -332,8 +332,6 @@ class Object {
     }
 }
 
-let ass = 0;
-
 function µ(selector) {
     let element = document.querySelector(selector);
     const self = {
