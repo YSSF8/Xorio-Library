@@ -1,4 +1,4 @@
-export { notice, alert, prompt, Movement, randomPosition, toPointer, Random, notification, Counter, Object, µ }
+export { notice, alert, prompt, Movement, randomPosition, toPointer, Random, notification, Counter, Object, µ, HoverEffx }
 
 // Links with the CSS
 const css = document.createElement('link');
@@ -314,12 +314,14 @@ class Counter {
     }
 }
 
+// Creates a new object
 class Object {
     constructor() {
         this.placeholder = '';
         this.value = '';
     }
 
+    // Element creation
     createElement(tag_name, class_name, id, text, parent) {
         const el = document.createElement(tag_name);
         el.className = class_name;
@@ -332,6 +334,7 @@ class Object {
     }
 }
 
+// Some JQuery features
 function µ(selector) {
     let element = document.querySelector(selector);
     const self = {
@@ -367,6 +370,10 @@ function µ(selector) {
         },
         align: (position) => {
             element.align = position;
+
+            if (element.align == 'undefined' || element.align == '') {
+                element.align = 'left';
+            }
         },
         addHTML: (markup) => {
             element.innerHTML += markup;
@@ -376,7 +383,36 @@ function µ(selector) {
         },
         draggable: (boolean) => {
             element.draggable = boolean;
+        },
+        clone: (parent) => {
+            const cloned = element.cloneNode(true);
+            document.querySelector(parent).appendChild(cloned);
         }
     }
     return self;
+}
+
+// Cool hover effects
+class HoverEffx {
+    // Shaking effect
+    shake(selector) {
+        const el = document.querySelectorAll(selector);
+        el.forEach(element => {
+            element.classList.add('xorio-hover-shake');
+        });
+    }
+    // Vibration effect
+    vibration(selector) {
+        const el = document.querySelectorAll(selector);
+        el.forEach(element => {
+            element.classList.add('xorio-hover-vib');
+        });
+    }
+    // Box effect
+    box(selector) {
+        const el = document.querySelectorAll(selector);
+        el.forEach(element => {
+            element.classList.add('xorio-hover-box');
+        });
+    }
 }
