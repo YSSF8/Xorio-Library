@@ -1,4 +1,4 @@
-# Xorio Library (2.0)
+# Xorio Library (2.1)
 
 This is a replacement for <a href="https://github.com/YSSF8/OnyxLibrary">Onyx library</a>. We've stopped updating it for some reason.
 
@@ -63,4 +63,10 @@ console.log(counter.variable); // To print the value in the console
 // This function is like jQuery
 xorio.µ('tag name, .class, or #id').on('click', () => xorio.alert('Something')); // Example for the addEventListener('click')
 console.log(xorio.µ('tag name, .class, or #id').html()); // To print the element in the console to make sure it works well
+
+// This class gives you a cool hover effects
+const hoverEffx = new xorio.HoverEffx();
+hoverEffx.shake('tag name, .class, or #id'); // Shaking effect
+hoverEffx.vibration('tag name, .class, or #id'); // Vibration effect
+hoverEffx.box('tag name, .class, or #id'); // Box effect
 ```
