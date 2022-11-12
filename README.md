@@ -16,14 +16,8 @@ import * as xorio from './xorio.js';
 
 ### How to use
 ```javascript
-// This function makes a little notification at the bottom of the page
-xorio.alert('Title');
-
-// This function makes a customizable console text
-xorio.print('Text you want to appear in the console', 'color: red; font-size: 30px;');
-
 // This function makes the element follows the cursor
-xorio.followPointer('tag name, .class, or #id');
+xorio.toPointer('tag name, .class, or #id');
 
 // This function makes a custom alert box
 xorio.alert('title', 'button text'); // If you leave the second option null it will automatically makes the button says (OK)
