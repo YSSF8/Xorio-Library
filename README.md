@@ -1,4 +1,4 @@
-# Xorio Library (2.1)
+# Xorio Library (2.2)
 
 This is a replacement for <a href="https://github.com/YSSF8/OnyxLibrary">Onyx library</a>. We've stopped updating it for some reason.
 
@@ -63,4 +63,11 @@ const hoverEffx = new xorio.HoverEffx();
 hoverEffx.shake('tag name, .class, or #id'); // Shaking effect
 hoverEffx.vibration('tag name, .class, or #id'); // Vibration effect
 hoverEffx.box('tag name, .class, or #id'); // Box effect
+
+// This function is a better method to use the (randomPosition, Movement, toPointer)
+xorio.position('tag name, .class, or #id').random(); // Go to a random position
+xorio.position('tag name, .class, or #id').followPointer(); // Makes the selected element follows the pointer
+xorio.position('tag name, .class, or #id').movement().arrows(); // Makes the selected element moves with the arrow keys
+xorio.position('tag name, .class, or #id').movement().wasd(); // Makes the selected element moves with the WASD keys
+xorio.position('tag name, .class, or #id').movement().both(); // Makes the selected element moves with the arrow/WASD keys
 ```
