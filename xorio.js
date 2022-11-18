@@ -1,4 +1,4 @@
-export { notice, alert, prompt, Movement, randomPosition, toPointer, Random, notification, Counter, Object, µ, HoverEffx }
+export { notice, alert, prompt, Movement, randomPosition, toPointer, Random, notification, Counter, Object, µ, HoverEffx, position }
 
 // Links with the CSS
 const css = document.createElement('link');
@@ -365,8 +365,8 @@ function µ(selector) {
         setText: (text) => {
             element.innerText = text;
         },
-        appendChild: (element_selection) => {
-            element.appendChild(element_selection);
+        appendChild: (selector) => {
+            element.appendChild(selector);
         },
         align: (position) => {
             element.align = position;
@@ -415,4 +415,111 @@ class HoverEffx {
             element.classList.add('xorio-hover-box');
         });
     }
+}
+
+// This function controls the position of the elements
+function position(selector) {
+    const el = document.querySelector(selector);
+    const self = {
+        // Makes the selected element go to a random position
+        random: () => {
+            el.style.position = 'fixed';
+            el.style.left = Math.floor(Math.random() * window.innerWidth) + 'px';
+            el.style.top = Math.floor(Math.random() * window.innerHeight) + 'px';
+        },
+        // Makes the selected element follows the pointer
+        followPointer: () => {
+            el.style.position = 'fixed';
+            el.style.pointerEvents = 'none';
+            document.addEventListener('mousemove', ({ clientX, clientY }) => {
+                let x = clientX, y = clientY;
+                el.style.left = x + 'px';
+                el.style.top = y + 'px';
+            });
+        },
+        // Makes the selected element moves with keyboard keys
+        movement: () => {
+            el.style.position = 'fixed';
+            el.style.transition = 'left 50ms, top 50ms';
+            let x = 0, y = 0;
+
+            const keys = {
+                // Moves with the arrow keys
+                arrows: () => {
+                    document.addEventListener('keydown', e => {
+                        switch (e.key) {
+                            case 'ArrowRight':
+                                x += 10;
+                                el.style.left = x + 'px';
+                                break;
+                            case 'ArrowLeft':
+                                x -= 10;
+                                el.style.left = x + 'px';
+                                break;
+                            case 'ArrowUp':
+                                y -= 10;
+                                el.style.top = y + 'px';
+                                break;
+                            case 'ArrowDown':
+                                y += 10;
+                                el.style.top = y + 'px';
+                                break;
+                        }
+                    });
+                },
+                // Moves with the WASD keys
+                wasd: () => {
+                    document.addEventListener('keydown', e => {
+                        switch (e.key) {
+                            case 'd':
+                                x += 10;
+                                el.style.left = x + 'px';
+                                break;
+                            case 'a':
+                                x -= 10;
+                                el.style.left = x + 'px';
+                                break;
+                            case 'w':
+                                y -= 10;
+                                el.style.top = y + 'px';
+                                break;
+                            case 's':
+                                y += 10;
+                                el.style.top = y + 'px';
+                                break;
+                        }
+                    });
+                },
+                // Moves with arrow/WASD keys
+                both: () => {
+                    document.addEventListener('keydown', e => {
+                        switch (e.key) {
+                            case 'ArrowRight':
+                            case 'd':
+                                x += 10;
+                                el.style.left = x + 'px';
+                                break;
+                            case 'ArrowLeft':
+                            case 'a':
+                                x -= 10;
+                                el.style.left = x + 'px';
+                                break;
+                            case 'ArrowUp':
+                            case 'w':
+                                y -= 10;
+                                el.style.top = y + 'px';
+                                break;
+                            case 'ArrowDown':
+                            case 's':
+                                y += 10;
+                                el.style.top = y + 'px';
+                                break;
+                        }
+                    });
+                }
+            }
+            return keys;
+        }
+    }
+    return self;
 }
