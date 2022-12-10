@@ -70,4 +70,8 @@ xorio.position('tag name, .class, or #id').followPointer(); // Makes the selecte
 xorio.position('tag name, .class, or #id').movement().arrows(); // Makes the selected element moves with the arrow keys
 xorio.position('tag name, .class, or #id').movement().wasd(); // Makes the selected element moves with the WASD keys
 xorio.position('tag name, .class, or #id').movement().both(); // Makes the selected element moves with the arrow/WASD keys
+
+// This class gives you a cool focus effects
+new xorio.FocusEffx('tag name, .class, or #id').shadow(range, 'color', ms); // Smooth shadow effect
+new xorio.FocusEffx('tag name, .class, or #id').changeBackgroundColor('color', ms); // changes the background color
 ```
