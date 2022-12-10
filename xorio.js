@@ -1,4 +1,4 @@
-export { notice, alert, prompt, Movement, randomPosition, toPointer, Random, notification, Counter, Object, µ, HoverEffx, position }
+export { notice, alert, prompt, Movement, randomPosition, toPointer, Random, notification, Counter, Create, µ, HoverEffx, position, FocusEffx }
 
 // Links with the CSS
 const css = document.createElement('link');
@@ -65,7 +65,7 @@ function alert(message, button_text) {
         el.style.opacity = 0;
         setTimeout(() => {
             el.remove();
-            document.body.style.pointerEvents = 'all';
+            document.body.removeAttribute('style');
             boxes = false;
         }, 200);
     });
@@ -118,7 +118,7 @@ function prompt(message, placeholder, button_text) {
         el.style.opacity = 0;
         setTimeout(() => {
             el.remove();
-            document.body.style.pointerEvents = 'all';
+            document.body.removeAttribute('style');
             boxes = false;
         }, 200);
     });
@@ -297,32 +297,32 @@ function notification(title, message) {
 // Creates an invisible counter
 class Counter {
     constructor() {
-        this.variable = 0;
+        this.value = 0;
     }
 
     // Counts up
     countUp(milliseconds) {
         setInterval(() => {
-            this.variable++;
+            this.value++;
         }, milliseconds);
     }
     // Counts down
     countDown(milliseconds) {
         setInterval(() => {
-            this.variable--;
+            this.value--;
         }, milliseconds);
     }
 }
 
 // Creates a new object
-class Object {
+class Create {
     constructor() {
         this.placeholder = '';
         this.value = '';
     }
 
     // Element creation
-    createElement(tag_name, class_name, id, text, parent) {
+    element(tag_name, class_name, id, text, parent) {
         const el = document.createElement(tag_name);
         el.className = class_name;
         el.id = id;
@@ -522,4 +522,52 @@ function position(selector) {
         }
     }
     return self;
+}
+
+// Cool focus effects
+class FocusEffx {
+    constructor(selector) {
+        this.selector = selector;
+    }
+
+    // Makes a shadow effect after clicking the selected elements
+    shadow(range, color, ms) {
+        const el = document.querySelectorAll(this.selector);
+
+        // Loops through the selected elements so every element will be affected
+        el.forEach(elem => {
+            elem.classList.add('xorio-focus-shadow');
+    
+            const style = document.createElement('style');
+            style.innerHTML = `
+                .xorio-focus-shadow {
+                    transition: box-shadow ${ms}ms;
+                }
+                .xorio-focus-shadow:focus {
+                    box-shadow: 0 0 0 ${range}px ${color};
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    }
+    // Changes the background color of the selected elements
+    changeBackgroundColor(color, ms) {
+        const el = document.querySelectorAll(this.selector);
+
+        // Loops through the selected elements so every element will be affected
+        el.forEach(elem => {
+            elem.classList.add('xorio-focus-change_color');
+
+            const style = document.createElement('style');
+            style.innerHTML = `
+                .xorio-focus-change_color {
+                    transition: background ${ms}ms;
+                }
+                .xorio-focus-change_color:focus {
+                    background-color: ${color};
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    }
 }
