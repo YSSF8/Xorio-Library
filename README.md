@@ -74,4 +74,16 @@ xorio.position('tag name, .class, or #id').movement().both(); // Makes the selec
 // This class gives you a cool focus effects
 new xorio.FocusEffx('tag name, .class, or #id').shadow(range, 'color', ms); // Smooth shadow effect
 new xorio.FocusEffx('tag name, .class, or #id').changeBackgroundColor('color', ms); // changes the background color
+
+// This function makes the site speak and tell the user the word inside it
+xorio.speak('Something'); // And it will say "Something"
+// And you can make it say a text inside the HTML
+const div = document.getElementById('myDiv');
+xorio.speak(div.innerText); // Now it will say the text inside the div element we've selected
+
+// This function allows you to create custom elements easier (BETA)
+const myElement = xorio.customElement('my-element');
+myElement.create(() => {
+  console.log('Working well!'); // This will print "Works well!" in the console when the element is in the HTML file
+});
 ```
