@@ -1,4 +1,4 @@
-export { notice, alert, prompt, Movement, randomPosition, toPointer, Random, notification, Counter, Create, µ, HoverEffx, position, FocusEffx }
+export { notice, alert, prompt, Movement, randomPosition, toPointer, Random, notification, Counter, Create, µ, HoverEffx, position, FocusEffx, speak, customElement }
 
 // Links with the CSS
 const css = document.createElement('link');
@@ -332,11 +332,21 @@ class Create {
         el.value = this.value;
         document.querySelector(parent).appendChild(el);
     }
+
+    // Ability to style elements
+    css(selector, list) {
+        const el = document.querySelector(selector);
+        const style = Object.entries(list())
+            .map(([prop, value]) => `${prop}: ${value};`)
+            .join('');
+        el.setAttribute('style', style);
+    }
 }
 
 // Some JQuery features
 function µ(selector) {
     let element = document.querySelector(selector);
+
     const self = {
         html: () => element,
         on: (event, callback) => {
@@ -387,6 +397,13 @@ function µ(selector) {
         clone: (parent) => {
             const cloned = element.cloneNode(true);
             document.querySelector(parent).appendChild(cloned);
+        },
+        val: value => {
+            if (value == null) {
+                return element.value;
+            } else {
+                element.value = value;
+            }
         }
     }
     return self;
@@ -537,7 +554,7 @@ class FocusEffx {
         // Loops through the selected elements so every element will be affected
         el.forEach(elem => {
             elem.classList.add('xorio-focus-shadow');
-    
+
             const style = document.createElement('style');
             style.innerHTML = `
                 .xorio-focus-shadow {
@@ -570,4 +587,43 @@ class FocusEffx {
             document.head.appendChild(style);
         });
     }
+}
+
+// The speak function makes the site say something
+function speak(word) {
+    const speak = new SpeechSynthesisUtterance(word);
+    speak.voice = speechSynthesis.getVoices().filter(voice => { return voice.name == 'Google US English Male'; })[0];
+    speak.rate = 1;
+
+    window.speechSynthesis.speak(speak);
+}
+
+// The custom element allows you to create a new element easier
+function customElement(tag) {
+    const self = {
+        create: callback => {
+            class NewElement extends HTMLElement {
+                constructor() {
+                    super();
+                }
+
+                connectedCallback() {
+                    callback();
+                }
+            }
+
+            customElements.define(tag, NewElement);
+        },
+        setAttr: (attr, value) => {
+            const el = document.querySelector(tag);
+            el.setAttribute(attr, value);
+        },
+        getAttr: attr => {
+            document.querySelector(tag).getAttribute(attr);
+        },
+        innerHTML: value => {
+            document.querySelector(tag).innerHTML = value;
+        }
+    }
+    return self;
 }
