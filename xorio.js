@@ -1,4 +1,4 @@
-export { notice, alert, prompt, Movement, randomPosition, toPointer, Random, notification, Counter, Create, µ, HoverEffx, position, FocusEffx, speak, customElement }
+export { box, Movement, randomPosition, toPointer, Counter, Create, µ, HoverEffx, position, FocusEffx, speak, customElement, events, random }
 
 // Links with the CSS
 const css = document.createElement('link');
@@ -6,122 +6,158 @@ css.rel = 'stylesheet';
 css.href = 'xorio.css';
 document.head.appendChild(css);
 
-// Shows up a notification
-function notice(message) {
-    const el = document.createElement('div');
-    el.innerText = message;
-    el.classList.add('xorio-notice');
-    document.body.appendChild(el);
+let boxes = false;
+let notifs = false;
 
-    // Appearing transition
-    setTimeout(() => {
-        el.style.opacity = 1;
-        el.style.bottom = '10%';
-    });
+const box = {
+    alert: (message, button_text) => {
+        const el = document.createElement('div');
+        el.innerHTML = `<h3 class="xorio-alert-title">"${document.title}" says</h3><div class="xorio-alert-message">${message}</div>`;
+        el.classList.add('xorio-alert');
+        document.body.appendChild(el);
 
-    // Disapearing
-    setTimeout(() => {
-        // Transition
-        el.style.opacity = 0;
-        el.style.bottom = '12%';
-        // Removing the element
+        const btn = document.createElement('button');
+        btn.innerText = button_text;
+        btn.classList.add('xorio-alert-btn');
+        el.appendChild(btn);
+
+        if (btn.innerText == 'undefined' || btn.innerText == '') {
+            btn.innerText = 'OK';
+        }
+
         setTimeout(() => {
+            el.style.top = '50%';
+            el.style.opacity = 1;
+            document.body.style.pointerEvents = 'none';
+            boxes = true;
+        });
+
+        if (boxes == true) {
             el.remove();
-        }, 200);
-    }, 1000);
-}
+        }
 
-let boxes = false; // A boolean to stop multiple boxes
+        btn.addEventListener('click', () => {
+            el.style.top = '47%';
+            el.style.opacity = 0;
+            setTimeout(() => {
+                el.remove();
+                document.body.removeAttribute('style');
+                boxes = false;
+            }, 200);
+        });
+    },
+    prompt: (message, placeholder, button_text) => {
+        // The body
+        const el = document.createElement('div');
+        el.innerHTML = `<h3 class="xorio-prompt-title">"${document.title}" says</h3><div class="xorio-prompt-message">${message}</div>`;
+        el.classList.add('xorio-prompt');
+        document.body.appendChild(el);
 
-// Custom alert box
-function alert(message, button_text) {
-    const el = document.createElement('div');
-    el.innerHTML = `<h3 class="xorio-alert-title">"${document.title}" says</h3><div class="xorio-alert-message">${message}</div>`;
-    el.classList.add('xorio-alert');
-    document.body.appendChild(el);
+        // The text input
+        const input = document.createElement('input');
+        input.placeholder = placeholder;
+        input.classList.add('xorio-prompt-input');
+        el.appendChild(input);
 
-    const btn = document.createElement('button');
-    btn.innerText = button_text;
-    btn.classList.add('xorio-alert-btn');
-    el.appendChild(btn);
+        // The OK button
+        const btn = document.createElement('button');
+        btn.innerText = button_text;
+        btn.classList.add('xorio-prompt-btn');
+        el.appendChild(btn);
 
-    if (btn.innerText == 'undefined' || btn.innerText == '') {
-        btn.innerText = 'OK';
-    }
+        // If the placeholder is null it will return nothing
+        if (input.placeholder == 'undefined') {
+            input.placeholder = '';
+        }
 
-    setTimeout(() => {
-        el.style.top = '50%';
-        el.style.opacity = 1;
-        document.body.style.pointerEvents = 'none';
-        boxes = true;
-    });
+        // If the button text is null it will return "OK"
+        if (btn.innerText == 'undefined' || btn.innerText == '') {
+            btn.innerText = 'OK';
+        }
 
-    if (boxes == true) {
-        el.remove();
-    }
-
-    btn.addEventListener('click', () => {
-        el.style.top = '47%';
-        el.style.opacity = 0;
+        // Appearing transition
         setTimeout(() => {
+            el.style.top = '50%';
+            el.style.opacity = 1;
+            document.body.style.pointerEvents = 'none';
+            boxes = true;
+        });
+
+        if (boxes == true) {
             el.remove();
-            document.body.removeAttribute('style');
-            boxes = false;
-        }, 200);
-    });
-}
+        }
 
-// Custom prompt box
-function prompt(message, placeholder, button_text) {
-    // The body
-    const el = document.createElement('div');
-    el.innerHTML = `<h3 class="xorio-prompt-title">"${document.title}" says</h3><div class="xorio-prompt-message">${message}</div>`;
-    el.classList.add('xorio-prompt');
-    document.body.appendChild(el);
+        btn.addEventListener('click', () => {
+            el.style.top = '47%';
+            el.style.opacity = 0;
+            setTimeout(() => {
+                el.remove();
+                document.body.removeAttribute('style');
+                boxes = false;
+            }, 200);
+        });
+    },
+    toast: message => {
+        const el = document.createElement('div');
+        el.innerText = message;
+        el.classList.add('xorio-toast');
+        document.body.appendChild(el);
 
-    // The text input
-    const input = document.createElement('input');
-    input.placeholder = placeholder;
-    input.classList.add('xorio-prompt-input');
-    el.appendChild(input);
-
-    // The OK button
-    const btn = document.createElement('button');
-    btn.innerText = button_text;
-    btn.classList.add('xorio-prompt-btn');
-    el.appendChild(btn);
-
-    // If the placeholder is null it will return nothing
-    if (input.placeholder == 'undefined') {
-        input.placeholder = '';
-    }
-
-    // If the button text is null it will return "OK"
-    if (btn.innerText == 'undefined' || btn.innerText == '') {
-        btn.innerText = 'OK';
-    }
-
-    // Appearing transition
-    setTimeout(() => {
-        el.style.top = '50%';
-        el.style.opacity = 1;
-        document.body.style.pointerEvents = 'none';
-        boxes = true;
-    });
-
-    if (boxes == true) {
-        el.remove();
-    }
-
-    btn.addEventListener('click', () => {
-        el.style.top = '47%';
-        el.style.opacity = 0;
+        // Appearing transition
         setTimeout(() => {
+            el.style.opacity = 1;
+            el.style.bottom = '10%';
+        });
+
+        // Disapearing
+        setTimeout(() => {
+            // Transition
+            el.style.opacity = 0;
+            el.style.bottom = '12%';
+            // Removing the element
+            setTimeout(() => {
+                el.remove();
+            }, 200);
+        }, 1000);
+    },
+    notification: (title, message) => {
+        // The body
+        const el = document.createElement('div');
+        el.innerHTML = `<h3 class="xorio-notification-title">${title}</h3>`;
+        el.classList.add('xorio-notification');
+        document.body.appendChild(el);
+
+        // The message content
+        const msg = document.createElement('div');
+        msg.innerText = message;
+        msg.classList.add('xorio-notification-message');
+        el.appendChild(msg);
+
+        // The remove button
+        const btn = document.createElement('div');
+        btn.classList.add('xorio-notification-close');
+        el.appendChild(btn);
+
+        // Appearing transition
+        setTimeout(() => {
+            notifs = true;
+            el.style.right = '10px';
+        });
+
+        // Removes the clones of the notifications
+        if (notifs == true) {
             el.remove();
-            document.body.removeAttribute('style');
-            boxes = false;
-        }, 200);
-    });
+        }
+
+        // Transition after clicking the remove button
+        btn.addEventListener('click', () => {
+            el.style.right = '-100%';
+            setTimeout(() => {
+                el.remove();
+                notifs = false;
+            }, 200);
+        });
+    }
 }
 
 // Makes the element moves using keys
@@ -235,65 +271,6 @@ function toPointer(element) {
     });
 }
 
-// Random things
-class Random {
-    constructor() {
-        this.number = this.number;
-        this.letter = Math.floor(Math.random() * (122 - 97 + 1) + 97);
-    }
-
-    // Gives a random letter
-    string() {
-        this.letter = String.fromCharCode(this.letter);
-    }
-    // Gives a random number
-    int(limit) {
-        this.number = Math.floor(Math.random() * limit);
-    }
-}
-
-let notifs = false; // A boolean to limit notifications
-
-// A notification
-function notification(title, message) {
-    // The body
-    const el = document.createElement('div');
-    el.innerHTML = `<h3 class="xorio-notification-title">${title}</h3>`;
-    el.classList.add('xorio-notification');
-    document.body.appendChild(el);
-
-    // The message content
-    const msg = document.createElement('div');
-    msg.innerText = message;
-    msg.classList.add('xorio-notification-message');
-    el.appendChild(msg);
-
-    // The remove button
-    const btn = document.createElement('div');
-    btn.classList.add('xorio-notification-close');
-    el.appendChild(btn);
-
-    // Appearing transition
-    setTimeout(() => {
-        notifs = true;
-        el.style.right = '10px';
-    });
-
-    // Removes the clones of the notifications
-    if (notifs == true) {
-        el.remove();
-    }
-
-    // Transition after clicking the remove button
-    btn.addEventListener('click', () => {
-        el.style.right = '-100%';
-        setTimeout(() => {
-            el.remove();
-            notifs = false;
-        }, 200);
-    });
-}
-
 // Creates an invisible counter
 class Counter {
     constructor() {
@@ -404,7 +381,12 @@ function µ(selector) {
             } else {
                 element.value = value;
             }
-        }
+        },
+        prevElement: element.previousElementSibling,
+        nextElement: element.nextElementSibling,
+        parentElement: element.parentElement,
+        firstElementChild: element.firstElementChild,
+        lastElementChild: element.lastElementChild
     }
     return self;
 }
@@ -626,4 +608,97 @@ function customElement(tag) {
         }
     }
     return self;
+}
+
+// Some new events
+function events(element) {
+    const el = document.querySelector(element);
+
+    const self = {
+        invisible: callback => {
+            if (getComputedStyle(el).getPropertyValue('visibility') == 'hidden' || el.style.visibiliy == 'hidden') {
+                callback();
+            }
+        },
+        tripleClick: callback => {
+            el.addEventListener('click', e => {
+                if (e.detail == 3) {
+                    callback();
+                }
+            });
+        },
+        quadraClick: callback => {
+            el.addEventListener('click', e => {
+                if (e.detail == 4) {
+                    callback();
+                }
+            });
+        },
+        clicksCount: (callback, clicks) => {
+            el.addEventListener('click', e => {
+                if (e.detail == clicks) {
+                    callback();
+                }
+            });
+        }
+    }
+    return self;
+}
+
+// Random system
+const random = {
+    number: {
+        integer: (first = 0, last = 1) => {
+            return Math.floor(Math.random() * (last - first + 1)) + first;
+        },
+        float: (first = 0, last = 1) => {
+            return Math.random() * (last - first) + first;
+        }
+    },
+    char: () => {
+        const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        const randomIndex = Math.floor(Math.random() * chars.length);
+        return chars[randomIndex];
+    },
+    color: {
+        hex: () => {
+            const hexChars = '0123456789ABCDEF';
+            let hexColor = '#';
+            for (let i = 0; i < 6; i++) {
+                hexColor += hexChars[Math.floor(Math.random() * hexChars.length)];
+            }
+            return hexColor;
+        },
+        rgb: () => {
+            function rand() {
+                return random.number.integer(0, 255);
+            }
+
+            return `rgb(${rand()}, ${rand()}, ${rand()})`;
+        },
+        hsl: () => {
+            const h = random.number.integer(0, 360);
+            const s = random.number.float(0, 1);
+            const l = random.number.float(0, 1);
+            return `hsl(${h}, ${s * 100}%, ${l * 100}%)`;
+        }
+    },
+    bool: () => {
+        const rand = random.number.integer(0, 1);
+
+        if (rand == 0) {
+            return false;
+        } else {
+            return true;
+        }
+    },
+    fromArray: (array = [1, 2, 3, 4, 5]) => {
+        return array[random.number.integer(0, array.length - 1)];
+    },
+    time: () => {
+        const hours = random.number.integer(0, 23).toString().padStart(2, '0');
+        const minutes = random.number.integer(0, 59).toString().padStart(2, '0');
+        const seconds = random.number.integer(0, 59).toString().padStart(2, '0');
+        return `${hours}:${minutes}:${seconds}`;
+    }
 }
