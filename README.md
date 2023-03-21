@@ -83,13 +83,13 @@ myElement.create(() => {
 });
 
 // This object contains some functions to get random things easier
-random.number.integer(0, 10); // This line gets a random number between 0 and 10
-random.number.float(0, 10); // This also gets a random number between 0 and 10, but this is float
-random.char(); // This gets a random character from "a-z", "A-Z"
-random.color.hex(); // This gets a random hex code
-random.color.rgb(); // This gets a random rgb code
-random.color.hsl(); // This gets a random hsl code
-random.bool(); // This gets a random boolean between "false" and "true"
-random.fromArray([5154, 451, 5151, 51747, 5121, 122]); // This will get a random number from the array inside the "()"
-random.time() // This will get a random time (hours, minutes, seconds), not the actual time
+xorio.random.number.integer(0, 10); // This line gets a random number between 0 and 10
+xorio.random.number.float(0, 10); // This also gets a random number between 0 and 10, but this is float
+xorio.random.char(); // This gets a random character from "a-z", "A-Z"
+xorio.random.color.hex(); // This gets a random hex code
+xorio.random.color.rgb(); // This gets a random rgb code
+xorio.random.color.hsl(); // This gets a random hsl code
+xorio.random.bool(); // This gets a random boolean between "false" and "true"
+xorio.random.fromArray([5154, 451, 5151, 51747, 5121, 122]); // This will get a random number from the array inside the "()"
+xorio.random.time() // This will get a random time (hours, minutes, seconds), not the actual time
 ```
