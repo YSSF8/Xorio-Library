@@ -1,4 +1,4 @@
-# Xorio Library (2.6)
+# Xorio Library (2.7)
 
 This is a replacement for <a href="https://github.com/YSSF8/OnyxLibrary">Onyx library</a>. We've stopped updating it for some reason.
 
@@ -27,11 +27,6 @@ xorio.prompt('title', 'button text', 'text field placeholder');
 
 // This function changes the position of the element
 xorio.randomPosition('tag name, .class, or #id');
-
-// This class creates a random letters/numbers
-const random = new xorio.Random();
-random.var(variable_limit); // This generates random number but not displayed in the web
-console.log(random.variable); // This prints the "random.var()" in the console (if you want)
 
 // This class gives the user ability to move the element using Arrow/WASD keys
 const movements = new xorio.Movement();
@@ -86,4 +81,15 @@ const myElement = xorio.customElement('my-element');
 myElement.create(() => {
   console.log('Working well!'); // This will print "Works well!" in the console when the element is in the HTML file
 });
+
+// This object contains some functions to get random things easier
+random.number.integer(0, 10); // This line gets a random number between 0 and 10
+random.number.float(0, 10); // This also gets a random number between 0 and 10, but this is float
+random.char(); // This gets a random character from "a-z", "A-Z"
+random.color.hex(); // This gets a random hex code
+random.color.rgb(); // This gets a random rgb code
+random.color.hsl(); // This gets a random hsl code
+random.bool(); // This gets a random boolean between "false" and "true"
+random.fromArray([5154, 451, 5151, 51747, 5121, 122]); // This will get a random number from the array inside the "()"
+random.time() // This will get a random time (hours, minutes, seconds), not the actual time
 ```
