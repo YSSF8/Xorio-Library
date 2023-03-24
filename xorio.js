@@ -1,4 +1,4 @@
-export { box, Movement, randomPosition, toPointer, Counter, Create, µ, HoverEffx, position, FocusEffx, speak, customElement, events, random }
+export { box, Movement, randomPosition, toPointer, Counter, µ, HoverEffx, position, FocusEffx, speak, customElement, events, random, Enum, isLeapYear, alphanumeric, isValidEmail, array, passwordGenerator, ElementCreator, graph, math }
 
 // Links with the CSS
 const css = document.createElement('link');
@@ -96,6 +96,17 @@ const box = {
                 boxes = false;
             }, 200);
         });
+
+        function on(callback) {
+            btn.addEventListener('click', () => {
+                callback(input.value);
+            });
+        }
+
+        return {
+            value: input.value,
+            ok: on
+        }
     },
     toast: message => {
         const el = document.createElement('div');
@@ -119,6 +130,8 @@ const box = {
                 el.remove();
             }, 200);
         }, 1000);
+
+        return el.innerText;
     },
     notification: (title, message) => {
         // The body
@@ -288,35 +301,6 @@ class Counter {
         setInterval(() => {
             this.value--;
         }, milliseconds);
-    }
-}
-
-// Creates a new object
-class Create {
-    constructor() {
-        this.placeholder = '';
-        this.value = '';
-    }
-
-    // Element creation
-    element(tag_name, class_name, id, text, parent) {
-        const el = document.createElement(tag_name);
-        el.className = class_name;
-        el.id = id;
-        el.innerHTML = text;
-        el.style.fontFamily = '\'Ubuntu\', sans-serif';
-        el.placeholder = this.placeholder;
-        el.value = this.value;
-        document.querySelector(parent).appendChild(el);
-    }
-
-    // Ability to style elements
-    css(selector, list) {
-        const el = document.querySelector(selector);
-        const style = Object.entries(list())
-            .map(([prop, value]) => `${prop}: ${value};`)
-            .join('');
-        el.setAttribute('style', style);
     }
 }
 
@@ -700,5 +684,311 @@ const random = {
         const minutes = random.number.integer(0, 59).toString().padStart(2, '0');
         const seconds = random.number.integer(0, 59).toString().padStart(2, '0');
         return `${hours}:${minutes}:${seconds}`;
+    }
+}
+
+// Adds the enum ability to JS
+function Enum(enumValues = []) {
+    const enumObj = {};
+
+    for (let i = 0; i < enumValues.length; i++) {
+        let [name, value] = enumValues[i].split('=');
+
+        if (value === undefined) {
+            // If there is no "=" in the enum value, treat it as an integer
+            value = i;
+        } else {
+            // If there is an "=", parse the value as an integer if it's a number, leave it as a string otherwise
+            value = Number.isNaN(parseInt(value)) ? value : parseInt(value);
+        }
+
+        enumObj[name] = value;
+    }
+
+    Object.freeze(enumObj);
+    return enumObj;
+}
+
+// Checks if the year is leap or not
+function isLeapYear(year = 0) {
+    if (year % 4 !== 0) {
+        return false;
+    } else if (year % 100 !== 0) {
+        return true;
+    } else if (year % 400 !== 0) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+// Alphanumeric features
+const alphanumeric = {
+    generate: (maxLength = 10) => {
+        const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        let result = '';
+
+        for (let i = 0; i < maxLength; i++) {
+            const randomIndex = Math.floor(Math.random() * chars.length);
+            result += chars[randomIndex];
+        }
+
+        return result;
+    },
+    test: (str = '') => {
+        if (typeof str !== 'string') {
+            return false;
+        }
+
+        const alphanumericRegex = /^[0-9a-zA-Z]+$/;
+        return alphanumericRegex.test(str);
+    },
+    generateWithPrefix: (prefix = '', maxLength = 10) => {
+        const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        let result = prefix;
+
+        for (let i = prefix.length; i < maxLength; i++) {
+            const randomIndex = Math.floor(Math.random() * chars.length);
+            result += chars[randomIndex];
+        }
+
+        return result;
+    },
+    generateWithSuffix: (suffix = '', maxLength = 10) => {
+        const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        let result = '';
+
+        for (let i = 0; i < maxLength - suffix.length; i++) {
+            const randomIndex = Math.floor(Math.random() * chars.length);
+            result += chars[randomIndex];
+        }
+
+        return result + suffix;
+    }
+}
+
+// Checks for the email if it's valid or not
+function isValidEmail(email = '') {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+// More options arrays
+const array = {
+    shuffler: (array = []) => {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    },
+    sum: (array = []) => {
+        let sum = 0;
+        for (let i = 0; i < array.length; i++) {
+            sum += array[i];
+        }
+        return sum;
+    },
+    max: (array = []) => {
+        if (array.length === 0) {
+            return null;
+        }
+        return Math.max(...array);
+    },
+    min: (array = []) => {
+        if (array.length === 0) {
+            return null;
+        }
+        return Math.min(...array);
+    },
+    last: (array = []) => {
+        if (array.length === 0) {
+            return null;
+        }
+        return array[array.length - 1];
+    }
+}
+
+// Generates random passwords
+function passwordGenerator(minLength = 8, maxLength = 14) {
+    const vowels = ['a', 'e', 'i', 'o', 'u'];
+    const consonants = ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z'];
+    const numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    let password = '';
+    let length = Math.floor(Math.random() * (maxLength - minLength + 1) + minLength);
+    let useVowels = Math.floor(Math.random() * 2) === 0;
+
+    for (let i = 0; i < length; i++) {
+        if (useVowels) {
+            password += vowels[Math.floor(Math.random() * vowels.length)];
+        } else {
+            password += consonants[Math.floor(Math.random() * consonants.length)];
+        }
+        useVowels = !useVowels;
+    }
+
+    let replaceIndex = Math.floor(Math.random() * length);
+    password = password.slice(0, replaceIndex) + numbers[Math.floor(Math.random() * numbers.length)] + password.slice(replaceIndex + 1);
+
+    return password;
+}
+
+// Creates an element
+class ElementCreator {
+    constructor(element) {
+        this.element = element;
+        this.class = '';
+        this.id = '';
+        this.innerHTML = '';
+        this.properties = {};
+    }
+
+    // Required so it can be added
+    add() {
+        const el = document.createElement(this.element);
+        el.innerHTML = this.innerHTML;
+
+        if (this.class != '') {
+            el.className = this.class;
+        }
+
+        if (this.id != '') {
+            el.id = this.id;
+        }
+
+        for (let [prop, val] of Object.entries(this.properties)) {
+            el[prop] = val;
+        }
+
+        return el;
+    }
+
+    // Selects the parent of the add
+    parent(selector) {
+        const parent = document.querySelector(selector);
+        parent.appendChild(this.add());
+    }
+
+    // Sets properties
+    setProperties(properties = {}) {
+        this.properties = properties;
+    }
+}
+
+// Graphing system
+function graph(selector, data, {
+    xLabel = 'X Label',
+    yLabel = 'Y Label',
+    title = 'Title',
+    dotSize = 5,
+    lineWidth = 2,
+    lineColor = '#298eb8',
+    showGrid = true,
+    gridColor = '#ddd',
+    font = '12px Arial',
+    textColor = '#eee'
+} = {}) {
+    const el = document.querySelector(selector);
+    const ctx = el.getContext('2d');
+    const padding = 50;
+    const height = el.height - padding * 2;
+    const width = el.width - padding * 2;
+    const max = Math.max(...data.map(point => point.y));
+    const min = Math.min(...data.map(point => point.y));
+    const xScale = width / (data.length - 1);
+    const yScale = height / (max - min);
+
+    // Draw x and y axes
+    ctx.beginPath();
+    ctx.moveTo(padding, padding);
+    ctx.lineTo(padding, height + padding);
+    ctx.lineTo(width + padding, height + padding);
+    ctx.strokeStyle = '#000';
+    ctx.stroke();
+
+    // Draw x and y labels
+    ctx.font = font;
+    ctx.textAlign = 'center';
+    ctx.fillStyle = textColor
+    ctx.fillText(xLabel, el.width / 2, el.height - padding / 2);
+    ctx.save();
+    ctx.rotate(-Math.PI / 2);
+    ctx.fillText(yLabel, -el.height / 2, padding / 2);
+    ctx.restore();
+
+    // Draw title
+    ctx.fillText(title, el.width / 2, padding / 2);
+
+    // Draw gridlines
+    if (showGrid) {
+        ctx.beginPath();
+        ctx.setLineDash([5, 3]);
+        ctx.strokeStyle = gridColor;
+        for (let i = 1; i < data.length; i++) {
+            ctx.moveTo(padding + i * xScale, padding);
+            ctx.lineTo(padding + i * xScale, height + padding);
+            ctx.moveTo(padding, padding + i * yScale);
+            ctx.lineTo(width + padding, padding + i * yScale);
+        }
+        ctx.stroke();
+    }
+
+    // Draw data points
+    ctx.beginPath();
+    ctx.fillStyle = lineColor;
+    ctx.strokeStyle = lineColor;
+    ctx.lineWidth = lineWidth;
+    ctx.moveTo(padding, height + padding - (data[0].y - min) * yScale);
+    for (let i = 1; i < data.length; i++) {
+        ctx.lineTo(padding + i * xScale, height + padding - (data[i].y - min) * yScale);
+    }
+    ctx.stroke();
+
+    for (let i = 0; i < data.length; i++) {
+        ctx.beginPath();
+        ctx.arc(padding + i * xScale, height + padding - (data[i].y - min) * yScale, dotSize, 0, 2 * Math.PI);
+        ctx.fill();
+    }
+}
+
+// More options for maths
+const math = {
+    ln: (num = NaN) => Math.log(num),
+    xor: (a, b) => (a || b) && !(a && b),
+    nor: (a, b) => !(a || b),
+    nand: (a, b) => !(a && b),
+    calc: (a = NaN, b = NaN, op = '') => {
+        switch (op) {
+            case '+':
+                return a + b;
+            case '-':
+                return a - b;
+            case '*':
+                return a * b;
+            case '/':
+                return a / b;
+            case '%':
+                return a % b;
+            case '':
+                throw new Error('Choose an operator "+, -, *, /, %"');
+            default:
+                throw new Error(`Invalid operator: ${op}`);
+        }
+    },
+    isPrime: (number = NaN) => {
+        // Check if number is less than 2 or not an integer
+        if (number < 2 || !Number.isInteger(number)) {
+            return false;
+        }
+
+        // Check if number is divisible by any integer from 2 to its square root
+        for (let i = 2; i <= Math.sqrt(number); i++) {
+            if (number % i === 0) {
+                return false;
+            }
+        }
+
+        // Number is prime if it passes all checks
+        return true;
     }
 }
