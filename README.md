@@ -152,7 +152,7 @@ let maxLength = 14;
 xorio.passwordGenerator(minLength, maxLength);
 
 // This class ceates a new element
-const elem = new ElementCreator('div');
+const elem = new xorio.ElementCreator('div');
 elem.class = 'class';
 elem.id = 'id';
 elem.innerHTML = 'Hello World!';
