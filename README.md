@@ -1,4 +1,8 @@
-# Xorio Library (3.0)
+<p align="center"><img src="./xorio.png" height="60" alt=""></p>
+
+* **Name**: Xorio
+* **Version**: 3.0
+* **Author**: YSSF
 
 This is a replacement for <a href="https://github.com/YSSF8/OnyxLibrary">Onyx library</a>. We've stopped updating it for some reason.
 
