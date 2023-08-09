@@ -1,7 +1,7 @@
 <p align="center"><img src="./xorio.png" height="60" alt=""></p>
 
 * **Name**: Xorio
-* **Version**: 3.0
+* **Version**: 3.1
 * **Author**: YSSF
 
 This is a replacement for <a href="https://github.com/YSSF8/OnyxLibrary">Onyx library</a>. We've stopped updating it for some reason.
@@ -205,4 +205,10 @@ math.isPrime(0); // Output: false
 math.isPrime(1); // Output: false
 math.isPrime(5); // Output: true
 math.isPrime(3); // Output: true
+
+// The new popup system
+popup.alert('Hello World!'); // Shows a simple alert box
+popup.prompt('What\'s your name?')
+  .then(val => popup.alert(`Hello, ${val}!`))
+  .then(() => popup.alert('Canceled!'));
 ```
