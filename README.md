@@ -210,5 +210,5 @@ math.isPrime(3); // Output: true
 popup.alert('Hello World!'); // Shows a simple alert box
 popup.prompt('What\'s your name?')
   .then(val => popup.alert(`Hello, ${val}!`))
-  .then(() => popup.alert('Canceled!'));
+  .catch(() => popup.alert('Canceled!'));
 ```
