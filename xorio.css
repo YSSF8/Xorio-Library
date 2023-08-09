@@ -193,6 +193,59 @@
     box-shadow: inset 0 0 5px 5px rgba(255, 255, 255, .4);
 }
 
+.xorio-popup-box {
+    background-color: var(--def-bg);
+    padding: 7px;
+    border-radius: 10px;
+    color: #fff;
+    position: fixed;
+    left: 50%;
+    top: 45%;
+    transform: translate(-50%, -50%);
+    width: 3in;
+    height: 1in;
+    pointer-events: all;
+    opacity: 0;
+    word-wrap: break-word;
+    font-family: var(--def-font);
+    z-index: 999;
+    transition: 200ms;
+    transition-property: top, opacity;
+}
+
+.xorio-popup-input {
+    outline: none;
+    background-color: var(--def-clr);
+    padding: 7px;
+    border-radius: 8px;
+    margin-top: 5px;
+    border: 1px solid #444;
+    color: #fff;
+    width: calc(100% - 17px);
+}
+
+.xorio-popup-btns {
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+}
+
+.xorio-popup-btn {
+    background-color: var(--def-clr);
+    outline: none;
+    border: none;;
+    padding: 7px;
+    color: #fff;
+    border-radius: 8px;
+    cursor: pointer;
+    min-width: 4pc;
+    transition: background 200ms;
+}
+
+.xorio-popup-btn:hover {
+    background-color: var(--def-clr-hover);
+}
+
 br::selection {
     background: none;
 }

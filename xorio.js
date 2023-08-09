@@ -1,4 +1,4 @@
-export { box, Movement, randomPosition, toPointer, Counter, µ, HoverEffx, position, FocusEffx, speak, customElement, events, random, Enum, isLeapYear, alphanumeric, isValidEmail, array, passwordGenerator, ElementCreator, graph, math }
+export { box, Movement, randomPosition, toPointer, Counter, µ, HoverEffx, position, FocusEffx, speak, customElement, events, random, Enum, isLeapYear, alphanumeric, isValidEmail, array, passwordGenerator, ElementCreator, graph, math, popup }
 
 // Links with the CSS
 const css = document.createElement('link');
@@ -990,5 +990,106 @@ const math = {
 
         // Number is prime if it passes all checks
         return true;
+    }
+}
+
+// The new system of popups
+const popup = {
+    alert(msg = '') {
+        // Creates the box
+        const box = document.createElement('div');
+        box.classList.add('xorio-popup-box');
+        box.textContent = msg;
+        box.style.boxShadow = `0 0 0 ${screen.width * 2}px rgba(0, 0, 0, .7)`;
+        document.body.appendChild(box);
+
+        // Creates the buttons
+        const btns = document.createElement('div');
+        btns.classList.add('xorio-popup-btns');
+        btns.innerHTML = '<button class="xorio-popup-btn">OK</button>';
+        box.appendChild(btns);
+
+        document.body.style.pointerEvents = 'none';
+
+        // Fades in the box
+        setTimeout(() => {
+            box.style.opacity = 1;
+            box.style.top = '50%';
+        });
+
+        const ok = btns.querySelector('.xorio-popup-btn');
+
+        ok.focus();
+
+        // Fades out the box and removes it when the OK button is clicked
+        ok.addEventListener('click', () => {
+            box.style.top = '45%';
+            box.style.opacity = 0;
+            document.body.style.removeProperty('pointer-events');
+            setTimeout(() => box.remove(), 200);
+        });
+    },
+    prompt(msg = '', value = '') {
+        // Creates the box
+        const box = document.createElement('div');
+        box.classList.add('xorio-popup-box');
+        box.textContent = msg;
+        box.style.boxShadow = `0 0 0 ${screen.width * 2}px rgba(0, 0, 0, .7)`;
+        document.body.appendChild(box);
+
+        // Creates the input
+        const input = document.createElement('input');
+        input.classList.add('xorio-popup-input');
+        input.value = value;
+        box.appendChild(input);
+
+        input.focus();
+
+        // Creates the br
+        const br = document.createElement('br');
+        box.insertBefore(br, input);
+
+        // Creates the buttons
+        const btns = document.createElement('div');
+        btns.classList.add('xorio-popup-btns');
+        btns.innerHTML = `
+        <button class="xorio-popup-btn">OK</button>
+        <button class="xorio-popup-btn">Cancel</button>
+        `;
+        box.appendChild(btns);
+
+        document.body.style.pointerEvents = 'none';
+
+        // Fades in the box
+        setTimeout(() => {
+            box.style.opacity = 1;
+            box.style.top = '50%';
+        });
+
+        const ok = btns.querySelector('.xorio-popup-btn:first-child');
+        const cancel = btns.querySelector('.xorio-popup-btn:last-child');
+
+        // Fades out the box and removes it when the ESC key is pressed
+        document.addEventListener('keyup', e => {
+            if (e.key == 'Escape') cancel.click();
+            else if (e.key == 'Enter') ok.click();
+        });
+
+        return new Promise((resolve, reject) => {
+            ok.addEventListener('click', () => {
+                box.style.top = '45%';
+                box.style.opacity = 0;
+                document.body.style.removeProperty('pointer-events');
+                setTimeout(() => box.remove(), 200);
+                resolve(input.value);
+            });
+            cancel.addEventListener('click', () => {
+                box.style.top = '45%';
+                box.style.opacity = 0;
+                document.body.style.removeProperty('pointer-events');
+                setTimeout(() => box.remove(), 200);
+                reject(null);
+            });
+        });
     }
 }
