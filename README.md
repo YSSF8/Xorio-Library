@@ -1,7 +1,7 @@
 <p align="center"><img src="./xorio.png" height="60" alt=""></p>
 
 * **Name**: Xorio
-* **Version**: 3.1
+* **Version**: 3.2
 * **Author**: YSSF
 
 This is a replacement for <a href="https://github.com/YSSF8/OnyxLibrary">Onyx library</a>. We've stopped updating it for some reason.
@@ -173,7 +173,7 @@ const data = [ // New array with objects declaration
 ];
 
 // Graph function with options
-graph('canvas', data, {
+xorio.graph('canvas', data, {
   xLabel = 'X Label',
   yLabel = 'Y Label',
   title = 'Title',
@@ -187,28 +187,45 @@ graph('canvas', data, {
 });
 
 // Math object
-math.ln(25);
-math.xor(true, false);
-math.nor(true, false);
-math.nand(true, false);
+xorio.math.ln(25);
+xorio.math.xor(true, false);
+xorio.math.nor(true, false);
+xorio.math.nand(true, false);
 
 // Calc function in the math object
-math.calc(6, 5, '+');
-math.calc(6, 5, '-');
-math.calc(6, 5, '*');
-math.calc(6, 5, '/');
-math.calc(6, 5, '%');
+xorio.math.calc(6, 5, '+');
+xorio.math.calc(6, 5, '-');
+xorio.math.calc(6, 5, '*');
+xorio.math.calc(6, 5, '/');
+xorio.math.calc(6, 5, '%');
 
 // Prime number checker
-math.isPrime(2); // Output: true
-math.isPrime(0); // Output: false
-math.isPrime(1); // Output: false
-math.isPrime(5); // Output: true
-math.isPrime(3); // Output: true
+xorio.math.isPrime(2); // Output: true
+xorio.math.isPrime(0); // Output: false
+xorio.math.isPrime(1); // Output: false
+xorio.math.isPrime(5); // Output: true
+xorio.math.isPrime(3); // Output: true
 
 // The new popup system
-popup.alert('Hello World!'); // Shows a simple alert box
-popup.prompt('What\'s your name?')
+xorio.popup.alert('Hello World!'); // Shows an alert box
+xorio.popup.prompt('What\'s your name?') // Shows a prompt box
   .then(val => popup.alert(`Hello, ${val}!`))
   .catch(() => popup.alert('Canceled!'));
+xorio.popup.confirm('Are you sure you want to proceed?') // Shows a confirmation box
+  .then(accept => console.log(accept)) // true
+  .catch(cancel => console.log(cancel)) // false
+
+// a class to work with CSV
+const csv = new CSV('./path/to/file.csv');
+csv.getFile().then(() => {
+  console.log(csv.getColumn(0));
+  console.log(csv.getRow(0));
+  csv.setColumn(0, ['NewValue1', 'NewValue2', 'NewValue3']);
+  csv.setRow(1, ['NewValue1', 'NewValue2', 'NewValue3']);
+  console.log(csv.displayAsArrays());
+  console.log(csv.displayAsArrays().header);
+  console.log(csv.displayAsArrays().rows);
+  console.log(csv.displayAsTable());
+  console.log(csv.getSize());
+});
 ```
