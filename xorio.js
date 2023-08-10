@@ -1,4 +1,4 @@
-export { box, Movement, randomPosition, toPointer, Counter, µ, HoverEffx, position, FocusEffx, speak, customElement, events, random, Enum, isLeapYear, alphanumeric, isValidEmail, array, passwordGenerator, ElementCreator, graph, math, popup }
+export { box, Movement, randomPosition, toPointer, Counter, µ, HoverEffx, position, FocusEffx, speak, customElement, events, random, Enum, isLeapYear, alphanumeric, isValidEmail, array, passwordGenerator, ElementCreator, graph, math, popup, CSV }
 
 // Links with the CSS
 const css = document.createElement('link');
@@ -999,7 +999,7 @@ const popup = {
         // Creates the box
         const box = document.createElement('div');
         box.classList.add('xorio-popup-box');
-        box.textContent = msg;
+        box.innerText = msg;
         box.style.boxShadow = `0 0 0 ${screen.width * 2}px rgba(0, 0, 0, .7)`;
         document.body.appendChild(box);
 
@@ -1033,7 +1033,7 @@ const popup = {
         // Creates the box
         const box = document.createElement('div');
         box.classList.add('xorio-popup-box');
-        box.textContent = msg;
+        box.innerText = msg;
         box.style.boxShadow = `0 0 0 ${screen.width * 2}px rgba(0, 0, 0, .7)`;
         document.body.appendChild(box);
 
@@ -1091,5 +1091,149 @@ const popup = {
                 reject(null);
             });
         });
+    },
+    confirm(msg = '') {
+        // Creates the box
+        const box = document.createElement('div');
+        box.classList.add('xorio-popup-box');
+        box.innerText = msg;
+        box.style.boxShadow = `0 0 0 ${screen.width * 2}px rgba(0, 0, 0, .7)`;
+        document.body.appendChild(box);
+        document.body.style.pointerEvents = 'none';
+
+        // Fades in the box
+        setTimeout(() => {
+            box.style.opacity = 1;
+            box.style.top = '50%';
+        });
+
+        // Creates the buttons
+        const btns = document.createElement('div');
+        btns.classList.add('xorio-popup-btns');
+        btns.innerHTML = `
+        <button class="xorio-popup-btn">OK</button>
+        <button class="xorio-popup-btn">Cancel</button>
+        `;
+        box.appendChild(btns);
+
+        const ok = btns.querySelector('.xorio-popup-btn:first-child');
+        const cancel = btns.querySelector('.xorio-popup-btn:last-child');
+
+        ok.focus();
+
+        return new Promise((resolve, reject) => {
+            ok.addEventListener('click', () => {
+                box.style.top = '45%';
+                box.style.opacity = 0;
+                document.body.style.removeProperty('pointer-events');
+                setTimeout(() => box.remove(), 200);
+                resolve(true);
+            });
+            cancel.addEventListener('click', () => {
+                box.style.top = '45%';
+                box.style.opacity = 0;
+                document.body.style.removeProperty('pointer-events');
+                setTimeout(() => box.remove(), 200);
+                reject(false);
+            });
+        });
+    }
+}
+
+class CSV {
+    constructor(path = '') {
+        this.path = path;
+        this.data = '';
+        this.column = 0;
+        this.row = 0;
+    }
+
+    getFile() {
+        return fetch(this.path)
+            .then(res => res.text())
+            .then(data => {
+                this.data = data;
+                this.column = data.split('\n')[0].split(',').length;
+                this.row = data.split('\n').length;
+            });
+    }
+
+    getColumn(index = 0) {
+        if (index < 0 || index >= this.column) {
+            throw new Error('Invalid column index');
+        }
+
+        const lines = this.data.split('\n');
+        const columnValues = lines.slice(1)
+            .map(line => line.split(',')[index]);
+
+        return columnValues;
+    }
+
+    getRow(index = 0) {
+        if (index < 0 || index >= this.row) {
+            throw new Error('Invalid row index');
+        }
+
+        const lines = this.data.split('\n');
+        const rowData = lines[index + 1].split(',');
+
+        return rowData;
+    }
+
+    setColumn(index, columnData) {
+        if (index < 0 || index >= this.column) {
+            throw new Error('Invalid column index');
+        }
+
+        const lines = this.data.split('\n');
+        for (let i = 1; i < lines.length; i++) {
+            const rowValues = lines[i].split(',');
+            rowValues[index] = columnData[i - 1];
+            lines[i] = rowValues.join(',');
+        }
+        this.data = lines.join('\n');
+    }
+
+    setRow(index, rowData) {
+        if (index < 0 || index >= this.row) {
+            throw new Error('Invalid row index');
+        }
+
+        const lines = this.data.split('\n');
+        lines[index + 1] = rowData.join(',');
+        this.data = lines.join('\n');
+    }
+
+    displayAsArrays() {
+        const lines = this.data.split('\n');
+        const header = lines[0].split(',');
+        const rows = lines.slice(1).map(line => line.split(','));
+
+        return {
+            header,
+            rows
+        };
+    }
+
+    displayAsTable() {
+        const lines = this.data.split('\n');
+        const header = lines[0].split(',');
+        const rows = lines.slice(1).map(line => line.split(','));
+
+        const columnWidths = header.map((column, index) => {
+            const maxLength = Math.max(column.length, ...rows.map(row => row[index].length));
+            return maxLength;
+        });
+
+        const separator = '+' + columnWidths.map(width => '-'.repeat(width + 2)).join('+') + '+';
+        const formattedHeader = '| ' + header.map((column, index) => column.padEnd(columnWidths[index])).join(' | ') + ' |';
+        const formattedRows = rows.map(row => '| ' + row.map((cell, index) => cell.padEnd(columnWidths[index])).join(' | ') + ' |');
+
+        return [separator, formattedHeader, separator, ...formattedRows, separator].join('\n');
+    }
+
+    getSize() {
+        return [this.column, this.row];
     }
 }
