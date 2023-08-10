@@ -216,7 +216,7 @@ xorio.popup.confirm('Are you sure you want to proceed?') // Shows a confirmation
   .catch(cancel => console.log(cancel)) // false
 
 // a class to work with CSV
-const csv = new CSV('./path/to/file.csv');
+const csv = new xorio.CSV('./path/to/file.csv');
 csv.getFile().then(() => {
   console.log(csv.getColumn(0));
   console.log(csv.getRow(0));
