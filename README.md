@@ -1,7 +1,7 @@
 <p align="center"><img src="./xorio.png" height="60" alt=""></p>
 
 * **Name**: Xorio
-* **Version**: 3.2
+* **Version**: 3.3
 * **Author**: YSSF
 
 This is a replacement for <a href="https://github.com/YSSF8/OnyxLibrary">Onyx library</a>. We've stopped updating it for some reason.
@@ -228,4 +228,7 @@ csv.getFile().then(() => {
   console.log(csv.displayAsTable());
   console.log(csv.getSize());
 });
+
+// The image editor has bunch of things that allows you yo modify images within your code
+const ie = new xorio.ImageEditor(); // You can learn more from the intellisense of VSCode
 ```
