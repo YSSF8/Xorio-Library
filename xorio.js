@@ -1,4 +1,4 @@
-export { box, Movement, randomPosition, toPointer, Counter, µ, HoverEffx, position, FocusEffx, speak, customElement, events, random, Enum, isLeapYear, alphanumeric, isValidEmail, array, passwordGenerator, ElementCreator, graph, math, popup, CSV }
+export { box, Movement, randomPosition, toPointer, Counter, µ, HoverEffx, position, FocusEffx, speak, customElement, events, random, Enum, isLeapYear, alphanumeric, isValidEmail, array, passwordGenerator, ElementCreator, graph, math, popup, CSV, ImageEditor }
 
 // Links with the CSS
 const css = document.createElement('link');
@@ -806,6 +806,14 @@ const array = {
             return null;
         }
         return array[array.length - 1];
+    },
+    search: (array = [], value = '') => {
+        for (let i = 0; i < array.length; i++) {
+            if (typeof array[i] === 'string' && array[i].includes(value)) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
 
@@ -1140,6 +1148,7 @@ const popup = {
     }
 }
 
+// Works with CSV files
 class CSV {
     constructor(path = '') {
         this.path = path;
@@ -1148,6 +1157,7 @@ class CSV {
         this.row = 0;
     }
 
+    // Sets the path of the CSV
     getFile() {
         return fetch(this.path)
             .then(res => res.text())
@@ -1158,6 +1168,7 @@ class CSV {
             });
     }
 
+    // Gets the column at the given index as an array
     getColumn(index = 0) {
         if (index < 0 || index >= this.column) {
             throw new Error('Invalid column index');
@@ -1170,6 +1181,7 @@ class CSV {
         return columnValues;
     }
 
+    // Gets the row at the given index as an array
     getRow(index = 0) {
         if (index < 0 || index >= this.row) {
             throw new Error('Invalid row index');
@@ -1181,6 +1193,7 @@ class CSV {
         return rowData;
     }
 
+    // Sets the column at the given index to the given columnData
     setColumn(index, columnData) {
         if (index < 0 || index >= this.column) {
             throw new Error('Invalid column index');
@@ -1195,6 +1208,7 @@ class CSV {
         this.data = lines.join('\n');
     }
 
+    // Sets the row at the given index to the given rowData
     setRow(index, rowData) {
         if (index < 0 || index >= this.row) {
             throw new Error('Invalid row index');
@@ -1205,6 +1219,7 @@ class CSV {
         this.data = lines.join('\n');
     }
 
+    // Displays the current CSV as arrays
     displayAsArrays() {
         const lines = this.data.split('\n');
         const header = lines[0].split(',');
@@ -1216,6 +1231,7 @@ class CSV {
         };
     }
 
+    // Displays the current CSV as a table
     displayAsTable() {
         const lines = this.data.split('\n');
         const header = lines[0].split(',');
@@ -1233,7 +1249,143 @@ class CSV {
         return [separator, formattedHeader, separator, ...formattedRows, separator].join('\n');
     }
 
+    // Get the size of the current CSV
     getSize() {
         return [this.column, this.row];
+    }
+}
+
+class ImageEditor {
+    constructor(src = '') {
+        this.src = src;
+        this.filter = 'none';
+    }
+
+    async crop(x = 0, y = 0, width = NaN, height = NaN) {
+        const img = new Image();
+        img.src = this.src;
+
+        await new Promise((resolve) => {
+            img.onload = resolve;
+        });
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, x, y, width, height, 0, 0, width, height);
+
+        this.src = canvas.toDataURL();
+        return this;
+    }
+
+    async watermark({
+        image = '',
+        text = 'New Watermark',
+        position = [10, 10],
+        size = [100, 100],
+    } = {}) {
+        const img = new Image();
+        img.src = this.src;
+
+        await new Promise((resolve) => {
+            img.onload = resolve;
+        });
+
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+
+        if (image) {
+            const watermarkImg = new Image();
+            watermarkImg.src = image;
+
+            await new Promise((resolve) => {
+                watermarkImg.onload = resolve;
+            });
+
+            ctx.drawImage(watermarkImg, position[0], position[1], size[0], size[1]);
+        } else {
+            ctx.font = '20px Arial';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+            ctx.fillText(text, position[0], position[1]);
+        }
+
+        this.src = canvas.toDataURL();
+        return this;
+    }
+
+    async setFilter(level = 5) {
+        const img = new Image();
+        img.src = this.src;
+
+        await new Promise((resolve) => {
+            img.onload = resolve;
+        });
+
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+
+        switch (this.filter) {
+            case 'blur':
+                ctx.filter = `blur(${level}px)`;
+                ctx.drawImage(img, 0, 0, img.width, img.height);
+                ctx.filter = 'none';
+                break;
+            case 'pixels':
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imageData.data;
+
+                for (let y = 0; y < canvas.height; y += level) {
+                    for (let x = 0; x < canvas.width; x += level) {
+                        const red = data[((canvas.width * y) + x) * 4];
+                        const green = data[((canvas.width * y) + x) * 4 + 1];
+                        const blue = data[((canvas.width * y) + x) * 4 + 2];
+
+                        ctx.fillStyle = `rgb(${red},${green},${blue})`;
+                        ctx.fillRect(x, y, level, level);
+                    }
+                }
+                break;
+            case 'noise':
+                const noiseData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+                for (let i = 0; i < noiseData.data.length; i += 4) {
+                    let noiseValue = Math.random() * level * 2 - level;
+                    noiseData.data[i] += noiseValue;
+                    noiseData.data[i + 1] += noiseValue;
+                    noiseData.data[i + 2] += noiseValue;
+                }
+
+                ctx.putImageData(noiseData, 0, 0);
+                break;
+            case 'grayscale':
+                const grayscaleData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+                for (let i = 0; i < grayscaleData.data.length; i += 4) {
+                    let grayValue = grayscaleData.data[i] * 0.2126 + grayscaleData.data[i + 1] * 0.7152 + grayscaleData.data[i + 2] * 0.0722;
+                    grayscaleData.data[i] = grayValue;
+                    grayscaleData.data[i + 1] = grayValue;
+                    grayscaleData.data[i + 2] = grayValue;
+                }
+
+                ctx.putImageData(grayscaleData, 0, 0);
+                break;
+            case 'brightness':
+                ctx.filter = `brightness(${level * 100}%)`;
+                ctx.drawImage(img, 0, 0);
+                ctx.filter = 'none';
+                break;
+            default:
+                throw new Error('Invalid filter');
+        }
+
+        this.src = canvas.toDataURL();
+        return this.src;
     }
 }
